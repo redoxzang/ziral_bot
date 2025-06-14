@@ -117,7 +117,7 @@ async def 대상추가(ctx, member: discord.Member):
 @bot.command()
 @commands.has_permissions(administrator=True)
 async def 대상삭제(ctx, member: discord.Member):
-    if member.id in bot_data["target_role_names"]:
+    if member.id in bot_data["target_user_ids"]:
         bot_data["target_user_ids"].remove(member.id)
         save_data()
         await ctx.send(f"{member.display_name} 님을 대상자에서 제거했어요.")
@@ -137,7 +137,7 @@ async def 역할추가(ctx, *, role_name):
 @bot.command()
 @commands.has_permissions(administrator=True)
 async def 역할제거(ctx, *, role_name):
-    if role_name in target_role_names:
+    if role_name in bot_data["target_role_names"]:
         bot_data["target_role_names"].remove(role_name)
         save_data()
         await ctx.send(f"'{role_name}' 역할을 대상에서 제거했어요.")
@@ -214,9 +214,9 @@ async def 숙제통계(ctx):
     missed = [str(date) for (uid, date), done in homework_records.items()
               if uid == ctx.author.id and not done]
     if not missed:
-        await ctx.send("숙제 완벽하게 다 했어! 대단해! 🏅")
+        await ctx.send(f"숙제 완벽하게 다 했어! 대단해! 🏅\n미제출일: {', '.join(missed)}( 총 {len(missed)}일 🌼)")
     else:
-        await ctx.send(f"미제출일: {', '.join(missed)}\n(총 {len(missed)}일 💀)")
+        await ctx.send(f"미제출일: {', '.join(missed)}( 총 {len(missed)}일 💀)")
 
 
 # 매일 특정 시간에 자동 디엠
